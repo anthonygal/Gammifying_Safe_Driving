@@ -8,11 +8,11 @@ pygame.init()
 fenetre = pygame.display.set_mode((640, 480))
 
 #Chargement et collage du fond
-fond = pygame.image.load("background.jpg").convert()
+fond = pygame.image.load("icons/background.jpg").convert()
 fenetre.blit(fond, (0,0))
 
 #Chargement et collage du personnage
-perso = pygame.image.load("/Python27/icons/steering-wheel.png").convert_alpha()
+perso = pygame.image.load("icons/steering-wheel.png").convert_alpha()
 position_perso = perso.get_rect()
 position_perso.center = 320,240
 #perso.center = 320,240
@@ -95,7 +95,6 @@ print("Hats :", mon_joystick.get_numhats())
 
 
 
-
 #BOUCLE INFINIE
 val=0
 continuer = 1
@@ -108,62 +107,58 @@ while continuer:
             if event.axis == 0:
                 if event.value > 0.20 and event.value <= 0.4:
                     perso = pygame.image.load("/Python27/icons/steering-wheel.png").convert_alpha()
-                    perso = pygame.transform.rotate(perso, 30)
+                    perso = pygame.transform.rotate(perso, -22)
                     position_perso = perso.get_rect()
                     position_perso.center = (320,240)
-                    fenetre.blit(perso, position_perso)
-                if event.value > 0.4 and event.value <= 0.6:
+                    fenetre.blit(perso, position_perso)                    
+                elif event.value > 0.4 and event.value <= 0.6:
                     perso = pygame.image.load("/Python27/icons/steering-wheel.png").convert_alpha()
-                    perso = pygame.transform.rotate(perso, 60)
+                    perso = pygame.transform.rotate(perso, -45)
                     position_perso = perso.get_rect()
                     position_perso.center = (320,240)
                     fenetre.blit(perso, position_perso)
-                if event.value > 0.6 and event.value <= 0.8:
+                elif event.value > 0.6 and event.value <= 0.8:
                     perso = pygame.image.load("/Python27/icons/steering-wheel.png").convert_alpha()
-                    perso = pygame.transform.rotate(perso, 90)
+                    perso = pygame.transform.rotate(perso, -67)
                     position_perso = perso.get_rect()
                     position_perso.center = (320,240)
                     fenetre.blit(perso, position_perso)
-                if event.value > 0.8 and event.value <= 1:
+                elif event.value > 0.8 and event.value <= 1:
                     perso = pygame.image.load("/Python27/icons/steering-wheel.png").convert_alpha()
-                    perso = pygame.transform.rotate(perso, 120)
+                    perso = pygame.transform.rotate(perso, -90)
                     position_perso = perso.get_rect()
                     position_perso.center = (320,240)
                     fenetre.blit(perso, position_perso)
-
-                # if event.value > 0.20 and event.value <= 1:
-                #     val2 = mon_joystick.get_axis(0)
-                #     print(val2)
-                #     print("ancien", val)
-                #     print("diff", val2-val)
-                #     if val2>val:
-                #         #position_perso = position_perso.move((val2-val)*100,0)
-                #         perso = pygame.image.load("/Python27/icons/steering-wheel.png").convert_alpha()
-                #         perso = pygame.transform.rotate(perso, -(val2-val)*100)
-                #         position_perso = perso.get_rect()
-                #         position_perso.center = 320,240
-                #         fenetre.blit(perso, position_perso)
-                #         #perso = perso.transform((val2-val)*100)
-                #         val=mon_joystick.get_axis(0)
-                #     else:
-                #         position_perso = position_perso.move((val2-val)*100,0)
-                #         val=mon_joystick.get_axis(0)
                 elif event.value <= 0.20 and event.value >= -0.20:
                     perso = pygame.image.load("/Python27/icons/steering-wheel.png").convert_alpha()
                     position_perso = perso.get_rect()
                     position_perso.center = (320,240)
                     fenetre.blit(perso, position_perso)
-                else:
-                    val2 = mon_joystick.get_axis(0)
-                    print(val2)
-                    print("ancien", val)
-                    print("diff", val2-val)
-                    if val2<val:
-                        position_perso = position_perso.move((val2-val)*100,0)
-                        val=mon_joystick.get_axis(0)
-                    else:
-                        position_perso = position_perso.move((val2-val)*100,0)
-                        val=mon_joystick.get_axis(0)
+                if event.value < -0.20 and event.value >= -0.4:
+                    perso = pygame.image.load("/Python27/icons/steering-wheel.png").convert_alpha()
+                    perso = pygame.transform.rotate(perso, 22)
+                    position_perso = perso.get_rect()
+                    position_perso.center = (320,240)
+                    fenetre.blit(perso, position_perso)
+                elif event.value < -0.4 and event.value >= -0.6:
+                    perso = pygame.image.load("/Python27/icons/steering-wheel.png").convert_alpha()
+                    perso = pygame.transform.rotate(perso, 45)
+                    position_perso = perso.get_rect()
+                    position_perso.center = (320,240)
+                    fenetre.blit(perso, position_perso)
+                elif event.value < -0.6 and event.value >= -0.8:
+                    perso = pygame.image.load("/Python27/icons/steering-wheel.png").convert_alpha()
+                    perso = pygame.transform.rotate(perso, 67)
+                    position_perso = perso.get_rect()
+                    position_perso.center = (320,240)
+                    fenetre.blit(perso, position_perso)
+                elif event.value < -0.8 and event.value >= -1:
+                    perso = pygame.image.load("/Python27/icons/steering-wheel.png").convert_alpha()
+                    perso = pygame.transform.rotate(perso, 90)
+                    position_perso = perso.get_rect()
+                    position_perso.center = (320,240)
+                    fenetre.blit(perso, position_perso)
+                
 
 
 
