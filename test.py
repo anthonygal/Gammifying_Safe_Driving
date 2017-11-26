@@ -41,6 +41,7 @@ def clignotant(time_clignotant, time_turn):
 def rapport_tr_aug(tr_min):
 	global score
 	global nbr_action
+	global good
 	score = score * nbr_action / (nbr_action + 1)
 	nbr_action = nbr_action + 1
 	if (tr_min < 2100) or (tr_min > 2900):
@@ -62,6 +63,7 @@ def rapport_tr_aug(tr_min):
 def rapport_tr_dim(tr_min):
 	global score
 	global nbr_action
+	global good
 	score = score * nbr_action / (nbr_action + 1)
 	nbr_action = nbr_action + 1
 	if (tr_min < 1100) or (tr_min > 1900):
@@ -139,9 +141,9 @@ text4 = font.render("km/h",1,(0,0,0))
 fenetre.blit(text4, (180, 390))
 
 #Score
-fenetre.fill(Color("black"),(120,30,60,50))
+fenetre.fill(Color("black"),(240,30,150,50))
 text5 = font.render("Score : "+str(score),1,(255,255,255))
-fenetre.blit(text5, (125, 35))
+fenetre.blit(text5, (250, 45))
 
 class augmenteTRM(Thread):
     def __init__(self, temps):
@@ -358,14 +360,14 @@ while continuer :
             else:
                 if event.button == 5:
                     if rapport < 5 and TRM > 2000:
-                        rapport = rapport + 1
-						rapport_tr_aug(TRM)
+                        rapport = rapport+1
+                        rapport_tr_aug(TRM)
                         TRM = TRM - 1000
                         print(rapport)
                 if event.button == 4:
                     if rapport > 1:
                         rapport = rapport - 1
-						rapport_tr_dim(TRM)
+                        rapport_tr_dim(TRM)
                         TRM = TRM + 1000
                         print(rapport)
 
@@ -466,12 +468,12 @@ while continuer :
             emo = pygame.transform.scale(emo, (50, 50))
             position_emo = emo.get_rect()
             position_emo.center = 490,50
-        if (good == 1):
+        if (good ==2):
             emo = pygame.image.load("icons/good.png").convert_alpha()
             emo = pygame.transform.scale(emo, (50, 50))
             position_emo = emo.get_rect()
             position_emo.center = 490,50
-        if (score >= 75):
+        if (good == 3):
             emo = pygame.image.load("icons/love.png").convert_alpha()
             emo = pygame.transform.scale(emo, (50, 50))
             position_emo = emo.get_rect()
@@ -497,9 +499,9 @@ while continuer :
     fenetre.blit(text2, (70, 390))
     text4 = font.render("km/h",1,(0,0,0))
     fenetre.blit(text4, (180, 390))
-	fenetre.fill(Color("black"),(120,30,60,50))
-	text5 = font.render("Score : "+str(score),1,(255,255,255))
-	fenetre.blit(text5, (125, 35))
+    fenetre.fill(Color("black"),(240,35,140,40))
+    text5 = font.render("Score : "+str(score),1,(255,255,255))
+    fenetre.blit(text5, (250, 45))
     vit = (TRM + rapport*1000 - 2000)/50
     text3 = font.render(str(vit),1,(255,255,255))
     fenetre.fill(Color("black"),(160,330,80,60))
