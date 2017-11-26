@@ -1,3 +1,7 @@
+import random
+import sys
+from threading import Thread
+import time
 import pygame
 from pygame.locals import *
 
@@ -15,10 +19,42 @@ fenetre.blit(fond, (0,0))
 perso = pygame.image.load("icons/steering-wheel.png").convert_alpha()
 position_perso = perso.get_rect()
 position_perso.center = 320,240
-#perso.center = 320,240
-
 fenetre.blit(perso, position_perso)
-#fenetre.blit(perso)
+
+#Vitesse
+font = pygame.font.Font(None, 32) 
+vitesse = 0
+TRM = 0
+
+fenetre.fill(Color("black"),(71,73,80,70))
+text = font.render(str(TRM),1,(255,255,255))
+fenetre.blit(text, (100, 100))
+
+class augmenteTRM(Thread):
+    def __init__(self, temps):
+        Thread.__init__(self)
+        self.temps = temps
+        self.running = False
+
+    def run(self):
+        global TRM
+        global text
+        global font
+        """Le code que le thread devra exécuter."""
+        self.running = True
+        # scrutation du buffer d'entree 
+        while self.running:
+            time.sleep(self.temps)
+            if self.running:
+                TRM += 1
+                fenetre.fill(Color("black"),(71,73,80,70))
+                text = font.render(str(TRM),1,(255,255,255))
+                fenetre.blit(text, (100, 100))
+                pygame.display.flip()
+ 
+    def stop(self):
+        self.running = False
+
 
 #Rafraï¿½chissement de l'ï¿½cran
 pygame.display.flip()
@@ -31,11 +67,10 @@ nb_joysticks = pygame.joystick.get_count()
 if nb_joysticks > 0:
     mon_joystick = pygame.joystick.Joystick(0)
     mon_joystick.init() #Initialisation
-
-print("Axes :", mon_joystick.get_numaxes())
-print("Boutons :", mon_joystick.get_numbuttons())
-print("Trackballs :", mon_joystick.get_numballs())
-print("Hats :", mon_joystick.get_numhats())
+    print("Axes :", mon_joystick.get_numaxes())
+    print("Boutons :", mon_joystick.get_numbuttons())
+    print("Trackballs :", mon_joystick.get_numballs())
+    print("Hats :", mon_joystick.get_numhats())
 ##
 ##continuer = 1
 ##while continuer:
@@ -106,59 +141,71 @@ while continuer:
         if event.type == JOYAXISMOTION:
             if event.axis == 0:
                 if event.value > 0.20 and event.value <= 0.4:
-                    perso = pygame.image.load("/Python27/icons/steering-wheel.png").convert_alpha()
+                    perso = pygame.image.load("icons/steering-wheel.png").convert_alpha()
                     perso = pygame.transform.rotate(perso, -22)
                     position_perso = perso.get_rect()
                     position_perso.center = (320,240)
-                    fenetre.blit(perso, position_perso)                    
+                    fenetre.blit(perso, position_perso)
                 elif event.value > 0.4 and event.value <= 0.6:
-                    perso = pygame.image.load("/Python27/icons/steering-wheel.png").convert_alpha()
+                    perso = pygame.image.load("icons/steering-wheel.png").convert_alpha()
                     perso = pygame.transform.rotate(perso, -45)
                     position_perso = perso.get_rect()
                     position_perso.center = (320,240)
                     fenetre.blit(perso, position_perso)
                 elif event.value > 0.6 and event.value <= 0.8:
-                    perso = pygame.image.load("/Python27/icons/steering-wheel.png").convert_alpha()
+                    perso = pygame.image.load("icons/steering-wheel.png").convert_alpha()
                     perso = pygame.transform.rotate(perso, -67)
                     position_perso = perso.get_rect()
                     position_perso.center = (320,240)
                     fenetre.blit(perso, position_perso)
                 elif event.value > 0.8 and event.value <= 1:
-                    perso = pygame.image.load("/Python27/icons/steering-wheel.png").convert_alpha()
+                    perso = pygame.image.load("icons/steering-wheel.png").convert_alpha()
                     perso = pygame.transform.rotate(perso, -90)
                     position_perso = perso.get_rect()
                     position_perso.center = (320,240)
                     fenetre.blit(perso, position_perso)
                 elif event.value <= 0.20 and event.value >= -0.20:
-                    perso = pygame.image.load("/Python27/icons/steering-wheel.png").convert_alpha()
+                    perso = pygame.image.load("icons/steering-wheel.png").convert_alpha()
                     position_perso = perso.get_rect()
                     position_perso.center = (320,240)
                     fenetre.blit(perso, position_perso)
                 if event.value < -0.20 and event.value >= -0.4:
-                    perso = pygame.image.load("/Python27/icons/steering-wheel.png").convert_alpha()
+                    perso = pygame.image.load("icons/steering-wheel.png").convert_alpha()
                     perso = pygame.transform.rotate(perso, 22)
                     position_perso = perso.get_rect()
                     position_perso.center = (320,240)
                     fenetre.blit(perso, position_perso)
                 elif event.value < -0.4 and event.value >= -0.6:
-                    perso = pygame.image.load("/Python27/icons/steering-wheel.png").convert_alpha()
+                    perso = pygame.image.load("icons/steering-wheel.png").convert_alpha()
                     perso = pygame.transform.rotate(perso, 45)
                     position_perso = perso.get_rect()
                     position_perso.center = (320,240)
                     fenetre.blit(perso, position_perso)
                 elif event.value < -0.6 and event.value >= -0.8:
-                    perso = pygame.image.load("/Python27/icons/steering-wheel.png").convert_alpha()
+                    perso = pygame.image.load("icons/steering-wheel.png").convert_alpha()
                     perso = pygame.transform.rotate(perso, 67)
                     position_perso = perso.get_rect()
                     position_perso.center = (320,240)
                     fenetre.blit(perso, position_perso)
                 elif event.value < -0.8 and event.value >= -1:
-                    perso = pygame.image.load("/Python27/icons/steering-wheel.png").convert_alpha()
+                    perso = pygame.image.load("icons/steering-wheel.png").convert_alpha()
                     perso = pygame.transform.rotate(perso, 90)
                     position_perso = perso.get_rect()
                     position_perso.center = (320,240)
                     fenetre.blit(perso, position_perso)
-                
+            if event.axis == 2:
+                if event.value < -0.2 and event.value >= -0.4:
+                    perso = pygame.image.load("icons/steering-wheel.png").convert_alpha()
+                    perso = pygame.transform.rotate(perso, -22)
+                    position_perso = perso.get_rect()
+                    position_perso.center = (320,240)
+                    fenetre.blit(perso, position_perso)
+                if event.value > 0.20 and event.value <= 0.4:
+                    perso = pygame.image.load("icons/steering-wheel.png").convert_alpha()
+                    perso = pygame.transform.rotate(perso, -22)
+                    position_perso = perso.get_rect()
+                    position_perso.center = (320,240)
+                    fenetre.blit(perso, position_perso)
 
 
 
@@ -175,5 +222,6 @@ while continuer:
     #Re-collage
     fenetre.blit(fond, (0,0))
     fenetre.blit(perso, position_perso)
+    fenetre.blit(text, (100, 100))
     #Rafraichissement
     pygame.display.flip()
