@@ -11,7 +11,7 @@ pygame.init()
 fenetre = pygame.display.set_mode((640, 480))
 
 #Chargement et collage du fond
-fond = pygame.image.load("icons/background.jpg").convert()
+fond = pygame.image.load("icons/background4.jpg").convert()
 fond = pygame.transform.scale(fond, (640, 480))
 fenetre.blit(fond, (0,0))
 
@@ -70,7 +70,7 @@ position_clig.center = 590,50
 #Chargement et collage du rapport
 rap = pygame.image.load("icons/one.png").convert_alpha()
 position_rap = rap.get_rect()
-position_rap.center = 490,340
+position_rap.center = 490,350
 
 
 #Rafra�chissement de l'�cran
@@ -302,25 +302,25 @@ while continuer :
         if (rapport == 1):
             rap = pygame.image.load("icons/one.png").convert_alpha()
             position_rap = rap.get_rect()
-            position_rap.center = 490,340
+            position_rap.center = 490,350
         if (rapport == 2):
             rap = pygame.image.load("icons/two.png").convert_alpha()
             position_rap = rap.get_rect()
-            position_rap.center = 490,340
+            position_rap.center = 490,350
         if (rapport == 3):
             rap = pygame.image.load("icons/three.png").convert_alpha()
             position_rap = rap.get_rect()
-            position_rap.center = 490,340
+            position_rap.center = 490,350
         if (rapport == 4):
             rap = pygame.image.load("icons/four.png").convert_alpha()
             position_rap = rap.get_rect()
-            position_rap.center = 490,340
+            position_rap.center = 490,350
         if (rapport == 5):
             rap = pygame.image.load("icons/five.png").convert_alpha()
             position_rap = rap.get_rect()
-            position_rap.center = 490,340
+            position_rap.center = 490,350
 
-
+            
     #Re-collage
     fenetre.blit(fond, (0,0))
     fenetre.blit(perso, position_perso)
