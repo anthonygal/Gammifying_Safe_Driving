@@ -1,10 +1,42 @@
 import random
 import sys
-import datetime
+import time
 from threading import *
 import time
 import pygame
 from pygame.locals import *
+
+score = 0
+nbr_action = 0
+
+def clignotant(time_clignotant, time_turn, score, nbr_action):
+	score = score * nbr_action
+	nbr_action = nbr_action + 1
+	delta = time_turn - time_clignotant
+	if (delta < 1):
+		score = (score + 0)/nbr_action
+	elif (delta > 1.5) & (delta <= 2):
+		score = (score + 25)/nbr_action
+	elif (delta > 2) & (delta <= 3):
+		score = (score + 50)/nbr_action
+	elif (delta > 3):
+		score = (score + 75)/nbr_action
+	return (score, nbr_action)
+
+
+def rapport(tr_min, score, nbr_action):
+	score = score * nbr_action
+	nbr_action = nbr_action + 1
+	if (tr_min < 1100) | (tr_min >= 2200):
+		score = (score + 0)/nbr_action
+	elif (tr_min >= 1100) & (tr_min < 1500):
+		score = (score + 25)/nbr_action
+	elif (tr_min >= 1500) & (tr_min < 2000):
+		score = (score + 50)/nbr_action
+	elif (tr_min >= 2000) & (tr_min < 2200):
+		score = (score + 75)/nbr_action
+	return (score, nbr_action)
+
 
 pygame.init()
 
@@ -180,6 +212,9 @@ tour=1000
 rapport=1
 continuer = 1
 thread = 0
+start_time = 0
+end_time = 0
+
 
 while continuer :
     for event in pygame.event.get():	#Attente des �v�nements
@@ -237,6 +272,11 @@ while continuer :
                     position_perso = perso.get_rect()
                     position_perso.center = 320,400
                 elif event.value < -0.8 and event.value >= -1:
+                    end_time = time.time()
+                    t = clignotant(start_time, end_time, score, nbr_action)
+                    score = t[0]
+                    nbr_action = t[1]
+                    print(score)
                     perso = pygame.image.load("icons/steering-wheel.png").convert_alpha()
                     perso = pygame.transform.scale(perso, (120, 120))
                     perso = pygame.transform.rotate(perso, 90)
@@ -249,9 +289,12 @@ while continuer :
         if event.type == JOYBUTTONDOWN:
             #while not (event.type == JOYBUTTONUP):
             if event.button == 1:
+                #global start_time
                 x=1
+                
             elif event.button == 2:
                 x=2
+                start_time = time.time()
             elif event.button == 0:
                 x=0
 
