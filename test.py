@@ -2,7 +2,6 @@ import random
 import sys
 import time
 from threading import *
-import time
 import pygame
 from pygame.locals import *
 
@@ -283,6 +282,7 @@ while continuer :
                 elif event.value < -0.8 and event.value >= -1:
                     end_time = time.time()
                     t = clignotant(start_time, end_time, score, nbr_action)
+                    start_time=0
                     score = t[0]
                     nbr_action = t[1]
                     print(score)
@@ -292,9 +292,10 @@ while continuer :
                     position_perso = perso.get_rect()
                     position_perso.center = 320,400
                     x=0
-            #if event.type == JOYBUTTONDOWN and event.button == 1:
-        #    digitalWrite(LED, HIGH)
-        #    delay(1000)
+
+
+
+
         if event.type == JOYBUTTONDOWN:
             #while not (event.type == JOYBUTTONUP):
             if event.button == 1:
@@ -426,7 +427,7 @@ while continuer :
 
 
     #Re-collage
-    #fenetre.blit(fond, (0,0))
+    fenetre.blit(fond, (0,0))
     vit = (TRM + rapport*1000 - 2000)/50
     text3 = font.render(str(vit),1,(255,255,255))
     fenetre.fill(Color("black"),(160,330,80,60))
