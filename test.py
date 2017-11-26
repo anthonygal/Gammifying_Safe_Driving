@@ -14,19 +14,20 @@ x=0
 rapport=1
 thread = 0
 
-def clignotant(time_clignotant, time_turn, score, nbr_action):
-	score = score * nbr_action
+def clignotant(time_clignotant, time_turn):
+	global score
+	global nbr_action
+	score = score * nbr_action / (nbr_action + 1)
 	nbr_action = nbr_action + 1
 	delta = time_turn - time_clignotant
 	if (delta < 1):
-		score = (score + 0)/nbr_action
+		score = score + 0/nbr_action
 	elif (delta > 1.5) & (delta <= 2):
-		score = (score + 25)/nbr_action
+		score = score + 25/nbr_action
 	elif (delta > 2) & (delta <= 3):
-		score = (score + 50)/nbr_action
+		score = score + 50/nbr_action
 	elif (delta > 3):
-		score = (score + 75)/nbr_action
-	return (score, nbr_action)
+		score = score + 75/nbr_action
 
 
 def rapport_tr(tr_min, score, nbr_action):
@@ -81,18 +82,18 @@ position_rap.center = 490,350
 #TRM
 TRM = 1000
 font = pygame.font.Font(None, 32)
-fenetre.fill(Color("black"),(50,330,80,60))                
+fenetre.fill(Color("black"),(50,330,80,60))
 text = font.render(str(TRM),1,(255,255,255))
 fenetre.blit(text, (65, 350))
-#font2 = pygame.font.Font(None, 18)              
+#font2 = pygame.font.Font(None, 18)
 text2 = font.render("tr/min",1,(0,0,0))
 fenetre.blit(text2, (70, 390))
 
 #Vitesse
 vit = 0
-fenetre.fill(Color("black"),(160,330,80,60))                
+fenetre.fill(Color("black"),(160,330,80,60))
 text3 = font.render(str(vit),1,(255,255,255))
-fenetre.blit(text3, (175, 350))            
+fenetre.blit(text3, (175, 350))
 text4 = font.render("km/h",1,(0,0,0))
 fenetre.blit(text4, (180, 390))
 
@@ -114,7 +115,7 @@ class augmenteTRM(Thread):
             if self.running:
                 if(TRM<8000):
                     TRM += 1
-                fenetre.fill(Color("black"),(50,330,80,60))                
+                fenetre.fill(Color("black"),(50,330,80,60))
                 text = font.render(str(TRM),1,(255,255,255))
                 fenetre.blit(text, (65, 350))
                 pygame.display.flip()
@@ -140,7 +141,7 @@ class diminuerTRM(Thread):
             if self.running:
                 if(TRM>1000):
                     TRM -= 1
-                fenetre.fill(Color("black"),(50,330,80,60))                
+                fenetre.fill(Color("black"),(50,330,80,60))
                 text = font.render(str(TRM),1,(255,255,255))
                 fenetre.blit(text, (65, 350))
                 pygame.display.flip()
@@ -299,7 +300,7 @@ while continuer :
             if event.button == 1:
                 #global start_time
                 x=1
-                
+
             elif event.button == 2:
                 x=2
                 start_time = time.time()
@@ -423,7 +424,7 @@ while continuer :
             #         print(tour)
 
 
-            
+
     #Re-collage
     #fenetre.blit(fond, (0,0))
     vit = (TRM + rapport*1000 - 2000)/50
