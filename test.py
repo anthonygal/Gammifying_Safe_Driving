@@ -19,29 +19,49 @@ def clignotant(time_clignotant, time_turn):
 	score = score * nbr_action / (nbr_action + 1)
 	nbr_action = nbr_action + 1
 	delta = time_turn - time_clignotant
-	if (delta < 1):
+	if(time_clignotant == 0):
 		score = score + 0/nbr_action
-	elif (delta > 1.5) & (delta <= 2):
+	if (delta < 1):
 		score = score + 25/nbr_action
-	elif (delta > 2) & (delta <= 3):
+	elif (delta > 1) and (delta <= 2):
 		score = score + 50/nbr_action
-	elif (delta > 3) & (delta <= 15):
+	elif (delta > 2) and (delta <= 3):
+		score = score + 100/nbr_action
+	elif (delta > 3) and (delta <= 15):
 		score = score + 75/nbr_action
 
 
-def rapport_tr(tr_min, score, nbr_action):
-	score = score * nbr_action
+def rapport_tr_aug(tr_min):
+	global score
+	global nbr_action
+	score = score * nbr_action / (nbr_action + 1)
 	nbr_action = nbr_action + 1
-	if (tr_min < 1100) | (tr_min >= 2200):
-		score = (score + 0)/nbr_action
-	elif (tr_min >= 1100) & (tr_min < 1500):
-		score = (score + 25)/nbr_action
-	elif (tr_min >= 1500) & (tr_min < 2000):
-		score = (score + 50)/nbr_action
-	elif (tr_min >= 2000) & (tr_min < 2200):
-		score = (score + 75)/nbr_action
-	return (score, nbr_action)
+	if (tr_min < 2100) or (tr_min > 2900):
+		score = score + 0/nbr_action
+	elif (tr_min < 2200) or (tr_min > 2800):
+		score = score + 25/nbr_action
+	elif (tr_min < 2300) or (tr_min > 2700):
+		score = score + 50/nbr_action
+	elif (tr_min < 2400) or (tr_min > 2600):
+		score = score + 75/nbr_action
+	else:
+		score = score + 100/nbr_action
 
+def rapport_tr_dim(tr_min):
+	global score
+	global nbr_action
+	score = score * nbr_action / (nbr_action + 1)
+	nbr_action = nbr_action + 1
+	if (tr_min < 1100) or (tr_min > 1900):
+		score = score + 0/nbr_action
+	elif (tr_min < 1200) or (tr_min > 1800):
+		score = score + 25/nbr_action
+	elif (tr_min < 1300) or (tr_min > 1700):
+		score = score + 50/nbr_action
+	elif (tr_min < 1400) or (tr_min > 1600):
+		score = score + 75/nbr_action
+	else:
+		score = score + 100/nbr_action
 
 pygame.init()
 
@@ -95,6 +115,11 @@ text3 = font.render(str(vit),1,(255,255,255))
 fenetre.blit(text3, (175, 350))
 text4 = font.render("km/h",1,(0,0,0))
 fenetre.blit(text4, (180, 390))
+
+#Score
+fenetre.fill(Color("black"),(120,30,60,50))
+text5 = font.render("Score : "+str(score),1,(255,255,255))
+fenetre.blit(text5, (125, 35))
 
 class augmenteTRM(Thread):
     def __init__(self, temps):
@@ -311,11 +336,13 @@ while continuer :
                 if event.button == 5:
                     if rapport < 5 and TRM > 2000:
                         rapport = rapport + 1
+						rapport_tr_aug(TRM)
                         TRM = TRM - 1000
                         print(rapport)
                 if event.button == 4:
                     if rapport > 1:
                         rapport = rapport - 1
+						rapport_tr_dim(TRM)
                         TRM = TRM + 1000
                         print(rapport)
 
@@ -431,6 +458,9 @@ while continuer :
     fenetre.blit(text2, (70, 390))
     text4 = font.render("km/h",1,(0,0,0))
     fenetre.blit(text4, (180, 390))
+	fenetre.fill(Color("black"),(120,30,60,50))
+	text5 = font.render("Score : "+str(score),1,(255,255,255))
+	fenetre.blit(text5, (125, 35))
     vit = (TRM + rapport*1000 - 2000)/50
     text3 = font.render(str(vit),1,(255,255,255))
     fenetre.fill(Color("black"),(160,330,80,60))
