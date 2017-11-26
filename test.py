@@ -12,23 +12,30 @@ x=0
 #val=0
 rapport=1
 thread = 0
+good = -1
 
 def clignotant(time_clignotant, time_turn):
 	global score
 	global nbr_action
+	global good
 	score = score * nbr_action / (nbr_action + 1)
 	nbr_action = nbr_action + 1
 	delta = time_turn - time_clignotant
 	if(time_clignotant == 0):
 		score = score + 0/nbr_action
+		good = 0
 	if (delta < 1):
 		score = score + 25/nbr_action
+		good = 1
 	elif (delta > 1) and (delta <= 2):
 		score = score + 50/nbr_action
+		good = 1
 	elif (delta > 2) and (delta <= 3):
 		score = score + 100/nbr_action
+		good = 3
 	elif (delta > 3) and (delta <= 15):
 		score = score + 75/nbr_action
+		good = 2
 
 
 def rapport_tr_aug(tr_min):
@@ -38,14 +45,19 @@ def rapport_tr_aug(tr_min):
 	nbr_action = nbr_action + 1
 	if (tr_min < 2100) or (tr_min > 2900):
 		score = score + 0/nbr_action
+		good = 0
 	elif (tr_min < 2200) or (tr_min > 2800):
 		score = score + 25/nbr_action
+		good = 1
 	elif (tr_min < 2300) or (tr_min > 2700):
 		score = score + 50/nbr_action
+		good = 1
 	elif (tr_min < 2400) or (tr_min > 2600):
 		score = score + 75/nbr_action
+		good = 2
 	else:
 		score = score + 100/nbr_action
+		good = 3
 
 def rapport_tr_dim(tr_min):
 	global score
@@ -54,14 +66,19 @@ def rapport_tr_dim(tr_min):
 	nbr_action = nbr_action + 1
 	if (tr_min < 1100) or (tr_min > 1900):
 		score = score + 0/nbr_action
+		good = 0
 	elif (tr_min < 1200) or (tr_min > 1800):
 		score = score + 25/nbr_action
+		good = 1
 	elif (tr_min < 1300) or (tr_min > 1700):
 		score = score + 50/nbr_action
+		good = 1
 	elif (tr_min < 1400) or (tr_min > 1600):
 		score = score + 75/nbr_action
+		good = 2
 	else:
 		score = score + 100/nbr_action
+		good = 3
 
 pygame.init()
 
@@ -97,6 +114,11 @@ position_clig.center = 590,50
 rap = pygame.image.load("icons/one.png").convert_alpha()
 position_rap = rap.get_rect()
 position_rap.center = 490,350
+
+#Chargement et collage de l'�moji
+emo = pygame.image.load("icons/NIL.png").convert_alpha()
+position_emo = emo.get_rect()
+position_emo.center = 490,50
 
 #TRM
 TRM = 1000
@@ -246,7 +268,8 @@ if nb_joysticks > 0:
 
 #BOUCLE INFINIE
 continuer = 1
-start_time = 0
+start_timed = 0
+start_timeg = 0
 end_time = 0
 
 while continuer :
@@ -276,8 +299,8 @@ while continuer :
                     position_perso.center = 320,400
                 elif event.value > 0.8 and event.value <= 1:
                     end_time = time.time()
-                    t = clignotant(start_time, end_time)
-                    start_time=0
+                    t = clignotant(start_timed, end_time)
+                    start_timed=0
                     print(score)
                     perso = pygame.image.load("icons/steering-wheel.png").convert_alpha()
                     perso = pygame.transform.scale(perso, (120, 120))
@@ -310,8 +333,8 @@ while continuer :
                     position_perso.center = 320,400
                 elif event.value < -0.8 and event.value >= -1:
                     end_time = time.time()
-                    t = clignotant(start_time, end_time)
-                    start_time=0
+                    t = clignotant(start_timeg, end_time)
+                    start_timeg=0
                     print(score)
                     perso = pygame.image.load("icons/steering-wheel.png").convert_alpha()
                     perso = pygame.transform.scale(perso, (120, 120))
@@ -325,10 +348,10 @@ while continuer :
             if event.button == 1:
                 #global start_time
                 x=1
-                start_time = time.time()
+                start_timed = time.time()
             elif event.button == 2:
                 x=2
-                start_time = time.time()
+                start_timeg = time.time()
             elif event.button == 0:
                 x=0
 
@@ -438,6 +461,22 @@ while continuer :
                     thread = augmenteTRM(0.002)
                     thread.start()
 
+        if (good == 0):
+            emo = pygame.image.load("icons/bad.png").convert_alpha()
+            emo = pygame.transform.scale(emo, (50, 50))
+            position_emo = emo.get_rect()
+            position_emo.center = 490,50
+        if (good == 1):
+            emo = pygame.image.load("icons/good.png").convert_alpha()
+            emo = pygame.transform.scale(emo, (50, 50))
+            position_emo = emo.get_rect()
+            position_emo.center = 490,50
+        if (score >= 75):
+            emo = pygame.image.load("icons/love.png").convert_alpha()
+            emo = pygame.transform.scale(emo, (50, 50))
+            position_emo = emo.get_rect()
+            position_emo.center = 490,50
+
             # if event.axis == 2:
             #     if event.value < -0.1 and event.value >= -1:
             #         #print(mon_joystick.get_axis(2))#accelerer
@@ -471,5 +510,6 @@ while continuer :
     fenetre.blit(clid, position_clid)
     fenetre.blit(clig, position_clig)
     fenetre.blit(rap, position_rap)
+    fenetre.blit(emo, position_emo)
     #Rafraichissement
     pygame.display.flip()
