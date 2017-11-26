@@ -8,6 +8,11 @@ from pygame.locals import *
 
 score = 0
 nbr_action = 0
+etat=0
+x=0
+#val=0
+rapport=1
+thread = 0
 
 def clignotant(time_clignotant, time_turn, score, nbr_action):
 	score = score * nbr_action
@@ -24,7 +29,7 @@ def clignotant(time_clignotant, time_turn, score, nbr_action):
 	return (score, nbr_action)
 
 
-def rapport(tr_min, score, nbr_action):
+def rapport_tr(tr_min, score, nbr_action):
 	score = score * nbr_action
 	nbr_action = nbr_action + 1
 	if (tr_min < 1100) | (tr_min >= 2200):
@@ -73,13 +78,23 @@ rap = pygame.image.load("icons/one.png").convert_alpha()
 position_rap = rap.get_rect()
 position_rap.center = 490,350
 
-#Vitesse
-vitesse = 0
+#TRM
 TRM = 1000
 font = pygame.font.Font(None, 32)
 fenetre.fill(Color("black"),(50,330,80,60))                
 text = font.render(str(TRM),1,(255,255,255))
 fenetre.blit(text, (65, 350))
+#font2 = pygame.font.Font(None, 18)              
+text2 = font.render("tr/min",1,(0,0,0))
+fenetre.blit(text2, (70, 390))
+
+#Vitesse
+vit = 0
+fenetre.fill(Color("black"),(160,330,80,60))                
+text3 = font.render(str(vit),1,(255,255,255))
+fenetre.blit(text3, (175, 350))            
+text4 = font.render("km/h",1,(0,0,0))
+fenetre.blit(text4, (180, 390))
 
 class augmenteTRM(Thread):
     def __init__(self, temps):
@@ -205,16 +220,9 @@ if nb_joysticks > 0:
 
 
 #BOUCLE INFINIE
-etat=0
-x=0
-val=0
-tour=1000
-rapport=1
 continuer = 1
-thread = 0
 start_time = 0
 end_time = 0
-
 
 while continuer :
     for event in pygame.event.get():	#Attente des �v�nements
@@ -417,7 +425,11 @@ while continuer :
 
             
     #Re-collage
-    fenetre.blit(fond, (0,0))
+    #fenetre.blit(fond, (0,0))
+    vit = (TRM + rapport*1000 - 2000)/50
+    text3 = font.render(str(vit),1,(255,255,255))
+    fenetre.fill(Color("black"),(160,330,80,60))
+    fenetre.blit(text3, (175, 350))
     fenetre.blit(perso, position_perso)
     fenetre.fill(Color("black"),(50,330,80,60))
     fenetre.blit(text, (65, 350))
