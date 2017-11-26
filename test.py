@@ -300,7 +300,7 @@ while continuer :
             if event.button == 1:
                 #global start_time
                 x=1
-
+                start_time = time.time()
             elif event.button == 2:
                 x=2
                 start_time = time.time()
@@ -427,10 +427,10 @@ while continuer :
 
     #Re-collage
     fenetre.blit(fond, (0,0))
-	text2 = font.render("tr/min",1,(0,0,0))
-	fenetre.blit(text2, (70, 390))
-	text4 = font.render("km/h",1,(0,0,0))
-	fenetre.blit(text4, (180, 390))
+    text2 = font.render("tr/min",1,(0,0,0))
+    fenetre.blit(text2, (70, 390))
+    text4 = font.render("km/h",1,(0,0,0))
+    fenetre.blit(text4, (180, 390))
     vit = (TRM + rapport*1000 - 2000)/50
     text3 = font.render(str(vit),1,(255,255,255))
     fenetre.fill(Color("black"),(160,330,80,60))
