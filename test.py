@@ -1,6 +1,7 @@
 import random
 import sys
-from threading import Thread
+import datetime
+from threading import *
 import time
 import pygame
 from pygame.locals import *
@@ -20,17 +21,33 @@ perso = pygame.image.load("icons/steering-wheel.png").convert_alpha()
 perso = pygame.transform.scale(perso, (120, 120))
 position_perso = perso.get_rect()
 
-position_perso.center = 320,240
-#position_perso.center = 320,400
+#position_perso.center = 320,240
+position_perso.center = 320,400
 fenetre.blit(perso, position_perso)
+
+
+#Chargement et collage du cligno_droit
+clid = pygame.image.load("icons/NIL.png").convert_alpha()
+position_clid = clid.get_rect()
+position_clid.center = 590,430
+
+#Chargement et collage du cligno_gauche
+clig = pygame.image.load("icons/NIL.png").convert_alpha()
+position_clig = clig.get_rect()
+position_clig.center = 590,50
+
+#Chargement et collage du rapport
+rap = pygame.image.load("icons/one.png").convert_alpha()
+position_rap = rap.get_rect()
+position_rap.center = 490,350
 
 #Vitesse
 vitesse = 0
-TRM = 0
+TRM = 1000
 font = pygame.font.Font(None, 32)
-fenetre.fill(Color("black"),(71,73,80,70))
+fenetre.fill(Color("black"),(50,330,80,60))                
 text = font.render(str(TRM),1,(255,255,255))
-fenetre.blit(text, (100, 100))
+fenetre.blit(text, (65, 350))
 
 class augmenteTRM(Thread):
     def __init__(self, temps):
@@ -48,30 +65,41 @@ class augmenteTRM(Thread):
         while self.running:
             time.sleep(self.temps)
             if self.running:
-                TRM += 1
-                fenetre.fill(Color("black"),(71,73,80,70))
+                if(TRM<8000):
+                    TRM += 1
+                fenetre.fill(Color("black"),(50,330,80,60))                
                 text = font.render(str(TRM),1,(255,255,255))
-                fenetre.blit(text, (100, 100))
+                fenetre.blit(text, (65, 350))
                 pygame.display.flip()
 
     def stop(self):
         self.running = False
 
-#Chargement et collage du cligno_droit
-clid = pygame.image.load("icons/NIL.png").convert_alpha()
-position_clid = clid.get_rect()
-position_clid.center = 590,430
+class diminuerTRM(Thread):
+    def __init__(self, temps):
+        Thread.__init__(self)
+        self.temps = temps
+        self.running = False
 
-#Chargement et collage du cligno_gauche
-clig = pygame.image.load("icons/NIL.png").convert_alpha()
-position_clig = clig.get_rect()
-position_clig.center = 590,50
+    def run(self):
+        global TRM
+        global text
+        global font
+        """Le code que le thread devra ex�cuter."""
+        self.running = True
+        # scrutation du buffer d'entree
+        while self.running:
+            time.sleep(self.temps)
+            if self.running:
+                if(TRM>1000):
+                    TRM -= 1
+                fenetre.fill(Color("black"),(50,330,80,60))                
+                text = font.render(str(TRM),1,(255,255,255))
+                fenetre.blit(text, (65, 350))
+                pygame.display.flip()
 
-#Chargement et collage du rapport
-rap = pygame.image.load("icons/one.png").convert_alpha()
-position_rap = rap.get_rect()
-position_rap.center = 490,350
-
+    def stop(self):
+        self.running = False
 
 #Rafra�chissement de l'�cran
 pygame.display.flip()
@@ -151,6 +179,7 @@ val=0
 tour=1000
 rapport=1
 continuer = 1
+thread = 0
 
 while continuer :
     for event in pygame.event.get():	#Attente des �v�nements
@@ -212,47 +241,9 @@ while continuer :
                     perso = pygame.transform.scale(perso, (120, 120))
                     perso = pygame.transform.rotate(perso, 90)
                     position_perso = perso.get_rect()
-                    position_perso.center = (320,240)
-                    fenetre.blit(perso, position_perso)
-
-            if event.axis == 2:
-                if event.value >= -0.2 and event.value <= 0.2:
-                    if(thread.isAlive()):
-                        thread.stop()
-                    thread = augmenteTRM(5)
-                    thread.start()
-                if event.value < -0.2 and event.value >= -0.4:
-                    if(thread.isAlive()):
-                        thread.stop()
-                    thread = augmenteTRM(1)
-                    thread.start()
-                if event.value < -0.4 and event.value >= -0.6:
-                    if(thread.isAlive()):
-                        thread.stop()
-                    thread = augmenteTRM(0.5)
-                    thread.start()
-
-                if event.value > 0.20 and event.value <= 0.4:
-                    perso = pygame.image.load("icons/steering-wheel.png").convert_alpha()
-                    perso = pygame.transform.rotate(perso, -22)
-                    position_perso = perso.get_rect()
-                    position_perso.center = (320,240)
-                    fenetre.blit(perso, position_perso)
-
-            # if event.axis == 2:
-            #     if event.value < -0.1 and event.value >= -1:
-            #         #print(mon_joystick.get_axis(2))#accelerer
-            #         tour = tour - mon_joystick.get_axis(2)* 60
-            #         print(tour)
-            #     elif event.value > 0.1 and event.value <= 1:
-            #         if tour > 1060:
-            #             tour = tour - mon_joystick.get_axis(2)* 60
-            #         else:
-            #             tour=1000
-            #         print(tour)
-
-
-        #if event.type == JOYBUTTONDOWN and event.button == 1:
+                    position_perso.center = 320,400
+                    x=0
+            #if event.type == JOYBUTTONDOWN and event.button == 1:
         #    digitalWrite(LED, HIGH)
         #    delay(1000)
         if event.type == JOYBUTTONDOWN:
@@ -266,14 +257,14 @@ while continuer :
 
             else:
                 if event.button == 5:
-                    if rapport < 5 and tour > 2000:
+                    if rapport < 5 and TRM > 2000:
                         rapport = rapport + 1
-                        tour = tour - 1000
+                        TRM = TRM - 1000
                         print(rapport)
                 if event.button == 4:
                     if rapport > 1:
                         rapport = rapport - 1
-                        tour = tour + 1000
+                        TRM = TRM + 1000
                         print(rapport)
 
         if (x==1):
@@ -320,12 +311,73 @@ while continuer :
             position_rap = rap.get_rect()
             position_rap.center = 490,350
 
+        if event.type == JOYAXISMOTION:
+            if event.axis == 2:
+                if event.value > 0.2 and event.value <= 0.4:
+                    if(thread!=0):
+                        thread.stop()
+                    thread = diminuerTRM(0.025)
+                    thread.start()
+                if event.value > 0.4 and event.value <= 0.6:
+                    if(thread!=0):
+                        thread.stop()
+                    thread = diminuerTRM(0.012)
+                    thread.start()
+                if event.value > 0.4 and event.value <= 0.8:
+                    if(thread!=0):
+                        thread.stop()
+                    thread = diminuerTRM(0.006)
+                    thread.start()
+                if event.value > 0.8 and event.value <= 1:
+                    if(thread!=0):
+                        thread.stop()
+                    thread = diminuerTRM(0.002)
+                    thread.start()
+                if event.value >= -0.2 and event.value <= 0.2:
+                    if(thread!=0):
+                        thread.stop()
+                    thread = diminuerTRM(0.5)
+                    thread.start()
+                if event.value < -0.2 and event.value >= -0.4:
+                    if(thread!=0):
+                        thread.stop()
+                    thread = augmenteTRM(0.025)
+                    thread.start()
+                if event.value < -0.4 and event.value >= -0.6:
+                    if(thread!=0):
+                        thread.stop()
+                    thread = augmenteTRM(0.012)
+                    thread.start()
+                if event.value < -0.6 and event.value >= -0.8:
+                    if(thread!=0):
+                        thread.stop()
+                    thread = augmenteTRM(0.006)
+                    thread.start()
+                if event.value < -0.8 and event.value >= -1:
+                    if(thread!=0):
+                        thread.stop()
+                    thread = augmenteTRM(0.002)
+                    thread.start()
+
+            # if event.axis == 2:
+            #     if event.value < -0.1 and event.value >= -1:
+            #         #print(mon_joystick.get_axis(2))#accelerer
+            #         tour = tour - mon_joystick.get_axis(2)* 60
+            #         print(tour)
+            #     elif event.value > 0.1 and event.value <= 1:
+            #         if tour > 1060:
+            #             tour = tour - mon_joystick.get_axis(2)* 60
+            #         else:
+            #             tour=1000
+            #         print(tour)
+
+
             
     #Re-collage
     fenetre.blit(fond, (0,0))
     fenetre.blit(perso, position_perso)
-    fenetre.fill(Color("black"),(71,73,80,70))
-    fenetre.blit(text, (100, 100))
+    fenetre.fill(Color("black"),(50,330,80,60))
+    fenetre.blit(text, (65, 350))
     fenetre.blit(clid, position_clid)
     fenetre.blit(clig, position_clig)
     fenetre.blit(rap, position_rap)
